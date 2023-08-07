@@ -15,7 +15,7 @@ You could load these two image datasets by the code in the "main_hmfusion.py" an
 ```
 from save_image_ziyuan_reduce import generate_data, crop_data
 name = 'zy'
-ms, pan, label = generate_data(ratio=12)  # please change ratio and the 'pan_path' in this function for different fusion tasks
+ms, pan, label = generate_data(ratio=12)  # please change ratio and the 'hs_path'/'pan_path' in this function for different fusion tasks
 ms_crop, pan_crop, label_crop = crop_data(ms, pan, label, training_size=16)
 ```
 
