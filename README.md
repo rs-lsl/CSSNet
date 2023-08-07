@@ -10,14 +10,14 @@ hyperspectral image/multi-spectral image:https://aistudio.baidu.com/aistudio/dat
 
 Note that these two real datasets are acquired by the Ziyuan 1-02D satellite. and they have been spatially registered, respectively.
 
-You could load these two image datasets by the code in the "main_hmfusion" and "save_img_ziyuan_hm.py" as:
+You could load these two image datasets by the code in the "main_hmfusion.py" and "main_hpfusion.py" as:
 
-```from save_image_ziyuan_reduce import generate_data, crop_data
+```
+from save_image_ziyuan_reduce import generate_data, crop_data
 name = 'zy'
-ms, pan, label = generate_data(ratio=12)  # change ratio for different fusion tasks
-ms_crop, pan_crop, label_crop = crop_data(ms, pan, label, training_size=16)```
-
-
+ms, pan, label = generate_data(ratio=12)  # please change ratio and the 'pan_path' in this function for different fusion tasks
+ms_crop, pan_crop, label_crop = crop_data(ms, pan, label, training_size=16)
+```
 
 The code of the paper ‘Hyperspectral image super-resolution network based on cross-scale non-local attention’.(TGRS)
 
