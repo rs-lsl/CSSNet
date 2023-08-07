@@ -18,7 +18,7 @@ main_hmfusion.py:
 from save_image_ziyuan_reduce import generate_data, crop_data
 name = 'zy'
 ms, pan, label = generate_data(ratio=3) 
-ms_crop, pan_crop, label_crop = crop_data(ms, pan, label, training_size=16)
+ms_crop, pan_crop, label_crop = crop_data(ms, pan, label, training_size=16)  # B×C×H×W
 ```
 
 main_hpfusion.py
@@ -27,7 +27,7 @@ main_hpfusion.py
 from save_image_ziyuan_hp import generate_data, crop_data
 name = 'zy'
 ms, pan, label = generate_data(ratio=12) 
-ms_crop, pan_crop, label_crop = crop_data(ms, pan, label, training_size=16)
+ms_crop, pan_crop, label_crop = crop_data(ms, pan, label, training_size=16)  # B×C×H×W
 ```
 
 And remember to adjust the train and test patch number for the different "training_size".
