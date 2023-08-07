@@ -92,7 +92,7 @@ def generate_data(ratio=3):
     Downsampler12 = Downsampler(ratio, padding=3)
 
     hs_path = '/home/aistudio/data/data120965/hs_last.npy'
-    pan_path = '/home/aistudio/data/data120965/ms_last.npy'
+    pan_path = '/home/aistudio/data/data120965/ms_last.npy'  # please change this path for the different fusion tasks.
     # save_dir = "/home/aistudio/work/ziyuan_hm"
 
     original_hs = np.float32(np.load(hs_path) / 4095.0)#[:, :1000, :1000]
