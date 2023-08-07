@@ -17,14 +17,14 @@ if __name__ == '__main__':
     train_xiongan = False
     if train_ziyuan:
         # band_ms = [1, 2, 3, 4, 5]   # wv2
-        from save_image_ziyuan_reduce import generate_data, crop_data
+        from save_image_ziyuan_hp import generate_data, crop_data
 
         name = 'zy'
-        train_num = 350
+        train_num = 350  # please adjust this number according to the crop size
         test_num = 50
         num_epochs = 500
         ms, pan, label = generate_data(ratio=12)
-        ms_crop, pan_crop, label_crop = crop_data(ms, pan, label, training_size=16)
+        ms_crop, pan_crop, label_crop = crop_data(ms, pan, label, training_size=16, step_facter=2)
 
         ms_crop = np.array(ms_crop, dtype='float32')
         pan_crop = np.array(pan_crop, dtype='float32')
