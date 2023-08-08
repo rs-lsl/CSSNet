@@ -4,9 +4,11 @@
 
 Include the hyperspectral image/pan image and hyperspectral image/multi-spectral image, which could be freely downloaded from the website:
 
-hyperspectral image/pan image:https://aistudio.baidu.com/aistudio/datasetdetail/95831
+hyperspectral image/pan image:**https://aistudio.baidu.com/aistudio/datasetdetail/95831**
 
-hyperspectral image/multi-spectral image:https://aistudio.baidu.com/aistudio/datasetdetail/120965
+hyperspectral image/multi-spectral image:**https://aistudio.baidu.com/aistudio/datasetdetail/120965**
+
+The google drive link of datasets: **https://drive.google.com/drive/folders/1oy2NaGmW-7MVZE5r42q3Zi_qUjcFHMDH?usp=drive_link**
 
 Note that these two real datasets are acquired by the Ziyuan 1-02D satellite. and they have been spatially registered, respectively.
 
