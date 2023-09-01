@@ -46,4 +46,4 @@ If you have any questions, please feel free to contact me.
 
 Please consider cite the paper if you find it helpful.
 
-Email:cug_lsl@cug.edu.cn
+Email:whu_lsl@whu.edu.cn
