@@ -156,6 +156,105 @@ def crop_data(hs_data, pan_data, label_data, training_size=64, ratio=16, step_fa
 
     return train_hs_image, train_pan_image, train_label
 
+def generate_data_hp(ratio_hs=4):
+
+    patch_size = 64
+    band_num = 126
+    img_num = 2
+    # ratio_hs = 16
+    ratio_mss = 4
+    endmembers_num = 5
+    band_mss = 5
+    ratio = 4
+
+    filename5 = [
+    '/home/aistudio/work/little_file/envi_plot_wv2.txt',
+    '/home/aistudio/work/little_file/hyperspectral_band_xiongan.txt'
+    ]
+    srf_simu = np.float32(generate_srf(filename5))
+    srf_pan = srf_simu[:, 1][:, None, None]
+    # srf_pan = np.expand_dims(np.expand_dims(np.load('/home/aistudio/data/data96268/srf_pan.npy'), axis=-1), axis=-1)
+    # srf_pan = np.expand_dims(np.expand_dims(np.load('/home/aistudio/work/Chikusei/srf_pan_Chikusei.npy'), axis=-1), axis=-1)
+
+    noise_mean = 0.0
+    noise_var = 0.0001
+
+    dowmsample16 = Downsampler(ratio_hs, kernel_size=9, padding=3)
+
+    path = '/home/aistudio/data/data95831/XiongAn.npy'
+    original_msi = np.float32(np.load(path)) / 16384.0
+    print(np.max(original_msi))
+    # original_msi = np.random.rand(126, 1000, 1000)
+    band, row, col = original_msi.shape
+
+    original_msi = original_msi[:, :(row - row%(ratio_hs*4)), :(col - col%(ratio_hs*4))]
+    print('original_msi.shape:', original_msi.shape)
+    print('max value:', np.max(original_msi))
+
+    # ratio 16
+    temp_blur = dowmsample16(paddle.to_tensor(np.expand_dims(original_msi, axis=0), dtype='float32'))
+    print(temp_blur.shape)
+    temp_blur = np.squeeze(temp_blur.numpy())
+    # _, rows, cols = temp_blur.shape
+    # blur_data = []
+    # for i3 in range(temp_blur.shape[0]):
+    #     blur_data.append(np.expand_dims(temp_blur[i3, :, :] +
+    #                                     np.random.normal(noise_mean, noise_var ** 0.5, [rows, cols]), axis=0))
+    # blur_data = np.concatenate(blur_data, axis=0)
+    # print('blur_data.shape:' + str(blur_data.shape))
+
+    # simulated pan image
+    temp_pan = np.expand_dims(np.sum(original_msi * srf_pan, axis=0) / np.sum(srf_pan), axis=0)
+    print('temp_pan.shape:' + str(temp_pan.shape))
+
+    return temp_blur, temp_pan, original_msi
+
+def crop_data_hp(hs_data, pan_data, label_data, training_size=64, ratio=16, step_facter=1):
+    train_ratio = 0.8
+    train_factor = 1
+    test_factor = 1  # 数值越大表明测试影像数量越少
+    save_num = 5  # 存储测试影像数目
+    band = 126
+    # training_size = 64  # training patch size
+    testing_size = 48  # testing patch size
+    # ratio = 3
+    save_dir = '/home/aistudio/work/Xiongan_hp'
+
+    # 加载数据
+    # base_dir0 = '/home/aistudio/work/Line'
+    # base_dir1 = '/home/aistudio/data/data96268/Line'
+
+    region = 'ziyuan_hm'
+
+    # hs_data = np.float32(np.load('/home/aistudio/work/ziyuan_hm/hs_90m.npy'))
+    # pan_data = np.float32(np.load('/home/aistudio/work/ziyuan_hm/ms_30m.npy'))
+    # label_data = np.float32(np.load('/home/aistudio/work/ziyuan_hm/hs_30m.npy'))
+
+    # hs_test = np.float32(np.load('/home/aistudio/work/ziyuan_hm/hs_30m.npy'))
+    # pan_test = np.float32(np.load('/home/aistudio/work/ziyuan_hm/ms_10m.npy'))
+
+    train_hs_image, train_pan_image, train_label = \
+        Crop_traindata_three(hs_data,             # 可调整size
+                            pan_data,
+                            label_data,
+                            training_size,
+                            test=False, step_facter=step_facter, ratio=ratio)
+
+    # test_hs_image, test_pan_image = \
+    #     Crop_traindata_two(hs_test,
+    #                     pan_test,
+    #                     testing_size,
+    #                     test=True, step_facter=1)
+
+    # print('train size:' + str(train_hs_image.shape))
+    # print('test size:' + str(test_hs_image.shape))
+    # np.save(save_dir + "/hrhs.npy", train_label)
+    # np.save(save_dir + "/lrhs.npy", train_hs_image)
+    # np.save(save_dir + "/hrpan.npy", train_pan_image)
+    # print(1)
+
+    return train_hs_image, train_pan_image, train_label
+
 def Crop_traindata_two(image_ms, image_pan, size, test=False, step_facter=1, ratio=3):
     image_ms_all = []
     image_pan_all = []
