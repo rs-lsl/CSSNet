@@ -33,12 +33,12 @@ if __name__ == '__main__':
         del ms, pan, label
 
     elif train_chikusei:
-        from save_image_chikusei_reduce import generate_data, crop_data
+        from save_image_chikusei_reduce import generate_data_hp, crop_data_hp
 
         name = 'chikusei'
         ratio_hs = 16
-        ms, pan, label = generate_data(ratio=ratio_hs)
-        ms_crop, pan_crop, label_crop = crop_data(ms, pan, label, training_size=16)
+        ms, pan, label = generate_data_hp(ratio=ratio_hs)
+        ms_crop, pan_crop, label_crop = crop_data_hp(ms, pan, label, training_size=16)
 
         # test the code
         # ms_crop = np.ones([5,128,16,16], dtype='float32')
@@ -63,13 +63,13 @@ if __name__ == '__main__':
         # del label
 
     elif train_xiongan:
-        from save_image_xiongan_reduce import generate_data, crop_data
+        from save_image_xiongan_reduce import generate_data_hp, crop_data_hp
 
         name = 'xiongan'
         save_dir = '/home/aistudio/work/Xiongan_hp'
         ratio_hs = 16
-        ms, pan, label = generate_data(ratio_hs=ratio_hs)
-        ms_crop, pan_crop, label_crop = crop_data(ms, pan, label, training_size=16, ratio=ratio_hs, step_facter=1)
+        ms, pan, label = generate_data_hp(ratio_hs=ratio_hs)
+        ms_crop, pan_crop, label_crop = crop_data_hp(ms, pan, label, training_size=16, ratio=ratio_hs, step_facter=1)
         # np.array(ms_crop, dtype='float32')
         # paddle.to_tensor(ms_crop1, dtype=paddle.float16, place=paddle.CUDAPlace(0))
         # label_crop =  paddle.to_tensor(np.load(save_dir + "/hrhs.npy"), dtype=paddle.float32, place=paddle.CUDAPlace(0))
