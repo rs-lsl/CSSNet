@@ -290,11 +290,11 @@ class cross_scale_attention(nn.Module):
                                         strides=[self.stride, self.stride], rates=[1, 1], shifts=self.shifts, padding='same')
 
         k_patch = k_patch.reshape([N, self.mid_ch, self.ks, self.ks, -1]).permute(0, 4, 1, 2, 3)
-        k_group = torch.split(k_patch, N, dim=0)
+        k_group = torch.split(k_patch, 1, dim=0)
 
         # 处理q
         q_fea = self.conv_q(pan)
-        q_group = torch.split(q_fea, N, dim=0)  # 作为被卷积的对象
+        q_group = torch.split(q_fea, 1, dim=0)  # 作为被卷积的对象
 
         # 处理v
         v_fea = self.conv_v(ms)
@@ -302,7 +302,7 @@ class cross_scale_attention(nn.Module):
                                         strides=[self.stride, self.stride], rates=[1, 1], shifts=self.shifts, padding='same')
 
         v_patch = v_patch.reshape([N, self.band_hs, self.ks, self.ks, -1]).permute(0, 4, 1, 2, 3)
-        v_group = torch.split(v_patch, N, dim=0)
+        v_group = torch.split(v_patch, 1, dim=0)
 
         result = []
         softmax_scale = self.softmax_scale
