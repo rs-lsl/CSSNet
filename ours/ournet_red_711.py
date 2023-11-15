@@ -76,6 +76,15 @@ def ournet(train_ms_image, train_pan_image, train_label,
                                         shuffle=False, drop_last=False)
 
     model = Our_net(band_hs, band_ms, mid_ch=mid_ch, ratio=ratio)
+
+    for name, param in model.named_parameters():
+        if 'bias' in name:
+            nn.init.constant_(param, 0)
+        elif len(param.shape) > 1:
+            nn.init.kaiming_normal_(param, mode='fan_out', nonlinearity='leaky_relu')
+        else:
+            nn.init.constant_(param, 0)
+            
     # last_recon = recon(band_hs, ks=3)
 
     print("Total number of paramerters in networks is {}  ".format(sum(x.numel() for x in model.parameters())))
