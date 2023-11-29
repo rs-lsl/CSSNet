@@ -1,5 +1,7 @@
 # CSSNet
 
+The code of the paper ‘**Hyperspectral Image Super-Resolution Network Based on Cross-Scale Nonlocal Attention**’.(TGRS)
+
 **UPDATE: We have open source the real ziyuan hyperspectral datasets used in this paper to contribute the hyperspectral image fusion field.**
 
 Include the hyperspectral image/pan image and hyperspectral image/multi-spectral image, which could be freely downloaded from the website:
@@ -33,8 +35,6 @@ ms_crop, pan_crop, label_crop = crop_data(ms, pan, label, training_size=16)  # B
 ```
 
 And remember to adjust the train and test patch number for the different "training_size".
-
-The code of the paper ‘Hyperspectral image super-resolution network based on cross-scale non-local attention’.(TGRS)
 
 The fusion between the hyperspectral and multi-spectral images could be conducted by running the ‘main_hmfusion.py’.
 
