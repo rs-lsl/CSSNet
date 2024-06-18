@@ -10,6 +10,7 @@ import time
 import signal
 import cv2
 import paddle
+import torch
 
 # from function import transpose_banddim
 # from function import generate_cropdata
@@ -95,7 +96,7 @@ def generate_data(ratio=4):
 
     Downsampler4 = Downsampler(ratio, kernel_size=9, padding=3)
 
-    temp_blur_hs = Downsampler4(paddle.to_tensor(np.expand_dims(original_hs, axis=0), dtype='float32'))
+    temp_blur_hs = Downsampler4(torch.tensor(np.expand_dims(original_hs, axis=0), dtype=torch.float32'))
     print(temp_blur_hs.shape)
     # np.save(save_dir + "/Chikusei_lrhs.npy", np.squeeze(temp_blur_hs.numpy(), axis=0))
 
