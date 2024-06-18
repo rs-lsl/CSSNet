@@ -9,7 +9,8 @@ import random
 import time
 import signal
 import cv2
-import paddle
+# import paddle
+import torch
 
 # from function import generate_cropdata
 # from function import Crop_traindata_ssr
@@ -106,11 +107,11 @@ def generate_data(ratio=3):
     print(original_hs.shape)
     print(original_pan.shape)
         
-    temp_blur_hs = Downsampler12(paddle.to_tensor(np.expand_dims(original_hs, axis=0), dtype='float32'))
+    temp_blur_hs = Downsampler12(torch.tensor(np.expand_dims(original_hs, axis=0), dtype=torch.float32))
     print(temp_blur_hs.shape)
     temp_blur_hs = np.squeeze(temp_blur_hs.numpy(), axis=0)
 
-    temp_blur_pan = Downsampler12(paddle.to_tensor(np.expand_dims(original_pan, axis=0), dtype='float32'))
+    temp_blur_pan = Downsampler12(torch.tensor(np.expand_dims(original_pan, axis=0), dtype=torch.float32))
     print(temp_blur_pan.shape)
     temp_blur_pan = np.squeeze(temp_blur_pan.numpy(), axis=0)
 
