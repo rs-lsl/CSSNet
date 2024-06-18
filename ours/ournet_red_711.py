@@ -75,7 +75,7 @@ def ournet(train_ms_image, train_pan_image, train_label,
     test_loader = torch.utils.data.DataLoader(dataset1, num_workers=0, batch_size=test_batch_size,
                                         shuffle=False, drop_last=False)
 
-    model = Our_net(band_hs, band_ms, mid_ch=mid_ch, ratio=ratio)
+    model = Our_net(band_hs, band_ms, mid_ch=mid_ch, ratio=ratio).to(device)
 
     for name, param in model.named_parameters():
         if 'bias' in name:
