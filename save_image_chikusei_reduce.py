@@ -9,7 +9,7 @@ import random
 import time
 import signal
 import cv2
-import paddle
+# import paddle
 import torch
 
 # from function import transpose_banddim
