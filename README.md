@@ -6,7 +6,7 @@ The code of the paper ‘**Hyperspectral Image Super-Resolution Network Based on
 
 Include the hyperspectral image/multi-spectral image/pan image, which could be freely downloaded from the website:
 
-**https://aistudio.baidu.com/aistudio/datasetdetail/95831**
+**https://aistudio.baidu.com/datasetdetail/281612**
 
 Note that this real dataset are acquired by the Ziyuan 1-02D satellite. and they have been spatially registered.
 
