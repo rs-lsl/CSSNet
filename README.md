@@ -14,7 +14,6 @@ You could load these images and crop them by the code in the "save_image_ziyuan_
 
 ```
 from save_image_ziyuan_hmp import generate_data, crop_data
-name = 'zy'
 hs, ms, pan, label = generate_data(ratio=12) 
 hs_crop, ms_crop, pan_crop, label_crop = crop_data(hs, ms, pan, label, training_size=16)  # B×C×H×W
 ```
