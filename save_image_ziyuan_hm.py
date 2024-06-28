@@ -74,11 +74,11 @@ def generate_srf(filename4):  # 产生和每个高光谱波段
 
 def generate_data(ratio=3):
 
-    patch_size = 64
+    patch_size = 48
     band_num = 126
     img_num = 2
     ratio_hs = 16
-    ratio_mss = 4
+    ratio_mss = 3
     endmembers_num = 5
     band_mss = 5
 
@@ -96,11 +96,11 @@ def generate_data(ratio=3):
     pan_path = '/home/aistudio/data/data120965/ms_last.npy'  # please change this path for the different fusion tasks.
     # save_dir = "/home/aistudio/work/ziyuan_hm"
 
-    original_hs = np.float32(np.load(hs_path) / 4095.0)#[:, :1000, :1000]
-    original_hs = original_hs[:, :int(original_hs.shape[1]-original_hs.shape[1]%48), :int(original_hs.shape[2]-original_hs.shape[2]%48)]
+    original_hs = np.float32(np.load(hs_path) / 4095.0)
+    original_hs = original_hs[:, :int(original_hs.shape[1]-original_hs.shape[1]%patch_size), :int(original_hs.shape[2]-original_hs.shape[2]%patch_size)]
  
-    original_pan = np.float32(np.load(pan_path) / 4095.0)#[:, :1000*12, :1000*12]
-    original_pan = original_pan[:, :int(original_pan.shape[1]-original_pan.shape[1]%(48*3)), :int(original_pan.shape[2]-original_pan.shape[2]%(48*3))]
+    original_pan = np.float32(np.load(pan_path) / 4095.0)
+    original_pan = original_pan[:, :int(original_pan.shape[1]-original_pan.shape[1]%(patch_size*ratio_mss)), :int(original_pan.shape[2]-original_pan.shape[2]%(patch_size*ratio_mss))]
 
     # np.save(save_dir+'/hs_30m.npy', original_hs)
     # np.save(save_dir+'/ms_10m.npy', original_pan)
