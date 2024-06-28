@@ -17,7 +17,7 @@ if __name__ == '__main__':
     train_chikusei = False
     if train_ziyuan:
         # band_ms = [1, 2, 3, 4, 5]   # wv2
-        from save_image_ziyuan_reduce import generate_data, crop_data
+        from save_image_ziyuan_hm import generate_data, crop_data
         name = 'zy'
         train_num = 650
         test_num = 50
