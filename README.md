@@ -10,6 +10,8 @@ Include the hyperspectral image/multi-spectral image/pan image, which could be f
 
 or from the baidunetdisk: **link：https://pan.baidu.com/s/1kVO6KyE1HHJBtRjLqjOzTA?pwd=abcd    password：abcd**
 
+or from the website: **https://www.kaggle.com/datasets/shuangliangli123/real-hsimsipan-image-dataset/data**
+
 Note that this real dataset is acquired from the Ziyuan 1-02D satellite. and they have been spatially registered.
 
 You could load these images and crop them by the code in the "save_image_ziyuan_hmp.py" as:
