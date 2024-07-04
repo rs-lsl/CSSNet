@@ -8,6 +8,8 @@ Include the hyperspectral image/multi-spectral image/pan image, which could be f
 
 **https://aistudio.baidu.com/datasetdetail/281612**
 
+or from the baidunetdisk: **link：https://pan.baidu.com/s/1kVO6KyE1HHJBtRjLqjOzTA?pwd=abcd    password：abcd**
+
 Note that this real dataset is acquired from the Ziyuan 1-02D satellite. and they have been spatially registered.
 
 You could load these images and crop them by the code in the "save_image_ziyuan_hmp.py" as:
