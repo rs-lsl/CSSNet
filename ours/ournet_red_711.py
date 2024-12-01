@@ -40,10 +40,10 @@ def high_level(hs, high_hs, batch_size, band_hs, win_size, h, w):
 
     sort_index = torch.argsort(index_map, dim=1)
 
-    hs0 = hs.reshape([batch_size, band_hs, -1]).numpy()
+    hs0 = hs.reshape([batch_size, band_hs, -1])#.cpu().numpy()
     sorted_hs = []
     for i in range(batch_size):
-        sorted_hs.append(torch.Tensor(hs0[i, :, sort_index[i, :]]))
+        sorted_hs.append(hs0[i, :, sort_index[i, :]])
         
     sorted_hs = torch.concat(sorted_hs, 0)
     sorted_hs = sorted_hs.reshape([batch_size, band_hs, win_size, int(h*w/win_size)])
