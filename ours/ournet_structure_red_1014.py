@@ -80,7 +80,10 @@ class BasicBlock(nn.Sequential):
             m.append(act)
 
         super(BasicBlock, self).__init__(*m)
-
+        # for layer in m:
+        #     if isinstance(layer, nn.BatchNorm2d):
+        #         layer.weight.data.fill_(1)  # 初始化 gamma 为 1
+        #         layer.bias.data.fill_(0)
 
 class simple_net(nn.Module):
     def __init__(self,
@@ -197,13 +200,16 @@ class encoder_hs(nn.Module):
 
         self.res0 = nn.ModuleList([res_net(mid_channel, mid_channel, mid_channel=mid_channel,
                                           kernelsize=ks) for _ in range(len_res)])
-
+        for layer in self.conv:
+            if isinstance(layer, nn.BatchNorm2d):
+                layer.weight.data.fill_(1)  # 初始化 gamma 为 1
+                layer.bias.data.fill_(0.1)
     def forward(self, hs):
         x2 = self.conv(hs)
-
+        # print(0, torch.any(torch.isnan(x2)))
         for i in range(len(self.res0)):
             x2 = self.res0[i](x2)
-
+        # print(1, torch.any(torch.isnan(x2)))
         return x2
 
 
@@ -230,13 +236,17 @@ class encoder_ms(nn.Module):
                                           kernelsize=ks) for _ in range(len_res)])
         # self.act = nn.Tanh()
 
+        for layer in self.conv:
+            if isinstance(layer, nn.BatchNorm2d):
+                layer.weight.data.fill_(1)  # 初始化 gamma 为 1
+                layer.bias.data.fill_(0.1)
     def forward(self, ms):
         x2 = self.conv(ms)
         # x2 = self.dense2(self.att(self.dense(x0)))
-
+        # print(2, torch.any(torch.isnan(x2)))
         for i in range(len(self.res0)):
             x2 = self.res0[i](x2)
-
+        # print(3, torch.any(torch.isnan(x2)))
         return x2
 
 
@@ -284,6 +294,7 @@ class cross_scale_attention(nn.Module):
     def forward(self, ms, pan, pan2):  # ms为原始分辨率多光谱影像或多光谱细节
         # 处理k
         k_fea = self.conv_k(pan2)
+        # print('1111', torch.any(torch.isnan(k_fea)))
         N, _, h, w = k_fea.shape
 
         k_patch = extract_image_patches2(k_fea, ksizes=[self.ks, self.ks],
@@ -291,19 +302,18 @@ class cross_scale_attention(nn.Module):
 
         k_patch = k_patch.reshape([N, self.mid_ch, self.ks, self.ks, -1]).permute(0, 4, 1, 2, 3)
         k_group = torch.split(k_patch, 1, dim=0)
-
         # 处理q
         q_fea = self.conv_q(pan)
+        # print('2222', torch.any(torch.isnan(q_fea)))
         q_group = torch.split(q_fea, 1, dim=0)  # 作为被卷积的对象
-
         # 处理v
         v_fea = self.conv_v(ms)
+        # print('3333', torch.any(torch.isnan(q_fea)))
         v_patch = extract_image_patches2(v_fea, ksizes=[self.ks, self.ks],
                                         strides=[self.stride, self.stride], rates=[1, 1], shifts=self.shifts, padding='same')
 
         v_patch = v_patch.reshape([N, self.band_hs, self.ks, self.ks, -1]).permute(0, 4, 1, 2, 3)
         v_group = torch.split(v_patch, 1, dim=0)
-
         result = []
         softmax_scale = self.softmax_scale
 
@@ -311,7 +321,10 @@ class cross_scale_attention(nn.Module):
             k0 = k[0]
             k0_max = torch.max(torch.sqrt(reduce_sum(torch.pow(k0, 2), axis=[1, 2, 3],
                                                        keepdim=True)))
-            k0 = k0 / k0_max
+            k0 = k0 / (k0_max + 1e-5)
+            # print(k0_max)
+            # print('4444', torch.any(torch.isnan(k0_max)))
+            # print('5555', torch.any(torch.isnan(k0)))
 
             # print(k0.shape)
             q0 = q[0]
@@ -459,22 +472,31 @@ class Our_net(nn.Module):
             # nn.Tanh())
 
     def forward(self, hs, ms):
+        # print('00', torch.any(torch.isnan(hs)))
+        # print('000', torch.any(torch.isnan(ms)))
         ratio_red = 2  # LRHS降的尺度
         # hs and ms's high level feature own the same channel number
         high_hs = self.encoder_hs_net(hs)
         high_ms = self.encoder_ms_net(ms)
+        # print(high_hs)
+        # print(high_hs)
 
         result_hs = self.transformer(hs, high_ms, high_hs)
+        # print('111', torch.any(torch.isnan(result_hs)))
         result_hs_red = self.transformer_red(hs, high_ms, high_hs)
+        # print('222', torch.any(torch.isnan(result_hs_red)))
         result_hs_red2 = self.transformer_red2(hs, high_ms, high_hs)
+        # print('333', torch.any(torch.isnan(result_hs_red2)))
         result_hs_red3 = self.transformer_red3(hs, high_ms, high_hs)
+        # print('444', torch.any(torch.isnan(result_hs_red3)))
 
         # print(result_hs.shape)
         result_spe = self.transformer_spe(ms, ms, hs)
-
+        # print('555', torch.any(torch.isnan(result_spe)))
+        # exit()
         result_hs = self.down_dim(torch.concat([result_hs, result_hs_red, result_hs_red2, result_hs_red3, result_spe], dim=1)) \
                     + F.upsample(hs, scale_factor=self.ratio, mode='bicubic')
-
+        # print('666', torch.any(torch.isnan(result_hs)))
         return result_hs, high_hs, high_ms   # , hs_red, high_hs_red, hs_red2, high_hs_red2
 
 
