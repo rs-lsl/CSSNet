@@ -179,6 +179,10 @@ class encoder_hs(nn.Module):
 
         self.res0 = nn.ModuleList([res_net(mid_channel, mid_channel, mid_channel=mid_channel,
                                           kernelsize=ks) for _ in range(len_res)])
+        for layer in self.conv:
+            if isinstance(layer, nn.BatchNorm2d):
+                layer.weight.data.fill_(1)  # 初始化 gamma 为 1
+                layer.bias.data.fill_(0.1)
 
     def forward(self, hs):
         x2 = self.conv(hs)
@@ -211,6 +215,10 @@ class encoder_ms(nn.Module):
         self.res0 = nn.ModuleList([res_net(mid_channel, mid_channel, mid_channel=mid_channel,
                                           kernelsize=ks) for _ in range(len_res)])
         # self.act = nn.Tanh()
+        for layer in self.conv:
+            if isinstance(layer, nn.BatchNorm2d):
+                layer.weight.data.fill_(1)  # 初始化 gamma 为 1
+                layer.bias.data.fill_(0.1)
 
     def forward(self, ms):
         x2 = self.conv(ms)
